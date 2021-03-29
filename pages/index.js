@@ -1,65 +1,58 @@
 import Head from 'next/head'
+import axios from 'axios'
+import { useState, useEffect } from 'react'
 import styles from '../styles/Home.module.css'
+import Books from './components/books';
 
 export default function Home() {
+  const [books, setBooks] = useState();
+  const [search, setSearch] = useState();
+  const [MaxResults, setMaxResults] = useState(12);
+  const [error, setError] = useState('');
+  const apikey = 'AIzaSyDlZnz8_eRUVRWOwFCHUmfae9yjNFc0RzM';
+
+  useEffect(() => {
+
+    async function HandlerSearch() {
+      const result = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${search?search:null}&orderBy=relevance&maxResults=${MaxResults}&:keyes&key=${apikey}`);
+      if(result){
+        const {items} = result.data;
+        console.log(result.data)
+        setBooks(items);
+      }
+    }
+
+    HandlerSearch();
+
+
+  }, [search,MaxResults])
+
+  // const handlerSearch = async () => {
+  //   setBooks(null)
+  //   await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${search}&maxResults=12&:keyes&key=${apikey}`).then((result) => {
+  //     const { items } = result.data
+  //     setBooks(items)
+  //   }).catch(() => {
+
+  //   })
+  // }
+
+
+
   return (
     <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
+      <div className={styles.search}>
+        <label htmlFor="">Buscar Livros:</label>
+        <input type="search" name="search" placeholder="Buscar Ebook" onChange={event => (setSearch(event.target.value))} />
+        <input type="number" name="maxResultas" className={styles.inputNumber} onChange={event =>(setMaxResults(event.target.value))} />
+      </div>
+      <div className={styles.ebooks}>
+        {
+          books ? books.map((item, key) => (
+            <Books data={item} key={key} />
+          )) : <div>Loading...</div>
+        }
+      </div>
     </div>
   )
 }
