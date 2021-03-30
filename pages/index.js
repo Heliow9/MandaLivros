@@ -6,7 +6,7 @@ import Books from './components/books';
 
 export default function Home() {
   const [books, setBooks] = useState();
-  const [search, setSearch] = useState('javascript');
+  const [search, setSearch] = useState();
   const [MaxResults, setMaxResults] = useState(12);
   const [error, setError] = useState('');
   const apikey = 'AIzaSyDlZnz8_eRUVRWOwFCHUmfae9yjNFc0RzM';
@@ -14,18 +14,14 @@ export default function Home() {
   useEffect(() => {
 
     async function HandlerSearch() {
-      const result = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${search?search:null}&orderBy=relevance&maxResults=${MaxResults}&:keyes&key=${apikey}`);
-      if(result){
-        const {items} = result.data;
-        console.log(result.data)
+      const result = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${search ? search : null}&orderBy=relevance&maxResults=${MaxResults}&:keyes&key=${apikey}`);
+      if (result) {
+        const { items } = result.data;
         setBooks(items);
       }
     }
-
-    HandlerSearch();
-
-
-  }, [search,MaxResults])
+    HandlerSearch()
+  }, [search, MaxResults])
 
   // const handlerSearch = async () => {
   //   setBooks(null)
@@ -44,7 +40,7 @@ export default function Home() {
       <div className={styles.search}>
         <label htmlFor="">Buscar Livros:</label>
         <input type="search" name="search" placeholder="Buscar Ebook" onChange={event => (setSearch(event.target.value))} />
-        <input type="number" name="maxResultas" className={styles.inputNumber} onChange={event =>(setMaxResults(event.target.value))} />
+        <input type="number" name="maxResultas" className={styles.inputNumber} onChange={event => (setMaxResults(event.target.value))} />
       </div>
       <div className={styles.ebooks}>
         {
@@ -55,4 +51,8 @@ export default function Home() {
       </div>
     </div>
   )
+}
+Error.getInitialProps = ({ res, err }) => {
+  const statusCode = res ? res.statusCode : err ? err.statusCode : 404
+  return { statusCode }
 }
