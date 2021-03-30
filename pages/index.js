@@ -6,7 +6,7 @@ import Books from './components/books';
 
 export default function Home() {
   const [books, setBooks] = useState();
-  const [search, setSearch] = useState();
+  const [search, setSearch] = useState('javascript');
   const [MaxResults, setMaxResults] = useState(12);
   const [error, setError] = useState('');
   const apikey = 'AIzaSyDlZnz8_eRUVRWOwFCHUmfae9yjNFc0RzM';
