@@ -7,6 +7,8 @@ import Rating from '@material-ui/lab/Rating';
 
 function Books({ data }) {
 
+  
+
   const { volumeInfo, saleInfo } = data;
   
 
