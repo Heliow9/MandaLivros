@@ -1,15 +1,12 @@
 import React from 'react';
 import styles from '../../styles/Home.module.css';
-import Image from 'next/image';
-import Rating from '@material-ui/lab/Rating';
 
 // import { Container } from './styles';
 
 function Books({ data }) {
 
-
   const { volumeInfo, saleInfo } = data;
-  
+
 
 
   return (
@@ -19,7 +16,7 @@ function Books({ data }) {
 
       <div className={styles.descriptions}>
         <span>{volumeInfo.title.substr(0, 45)}</span>
-        <h4>{saleInfo.listPrice?`R$${saleInfo.listPrice.amount}`:'Free'}</h4>
+        <h4>{saleInfo.listPrice ? `R$${saleInfo.listPrice.amount}` : 'Free'}</h4>
       </div>
       {/* <div>Rating: <Rating name="read-only" value={value} readOnly /> </div> */}
     </div>
